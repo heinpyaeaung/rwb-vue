@@ -1,18 +1,22 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <Navbar/>
+    <div>
+        <h1>Home Page</h1>
+        <cld-image cloudName="drtoeefis" publicId="https://res.cloudinary.com/drtoeefis/image/upload/v1655924486/rwb_content_image/emumjjhdxbnwkjf2yuio.png">
+            <cld-transformation crop="scale" width="200" angle="10" />
+        </cld-image>
+    </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
-export default {
-  name: 'Home',
-  components: {
-    HelloWorld
-  }
-}
+    import Navbar from '../components/navbar.vue'
+    export default {
+        components: {
+            Navbar,
+        },
+    }
 </script>
+
+<style lang="scss" scoped>
+
+</style>
