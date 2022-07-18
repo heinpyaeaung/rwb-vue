@@ -55,7 +55,8 @@
     import Alertbox from './alertbox.vue';
     import Loading from 'vue-loading-overlay';
     import 'vue-loading-overlay/dist/vue-loading.css';
-   
+    import axios from 'axios'
+    
     export default {
         name: "editor",
         components: {
@@ -86,21 +87,30 @@
                 header: '',
                 author: '',
                 image: '',
+                cloudinary_image_url:'',
                 contentType: '',
                 permission: '',
             }
         },
         methods: {
             async sendInfos() {
+                const instance = axios.create()
                 const formData = new FormData();
+                const formDataOfCl = new FormData();
                 this.isLoading = true;
+               
                 try{
+                    formDataOfCl.set('upload_preset', "rwb_content_image");
+                    formDataOfCl.set('file', this.image)
+                    // formDataOfCl.set('cloud_name', '')
+                    let cloudinary_image_url = await instance.post('https://api.cloudinary.com/v1_1/drtoeefis/image/upload', formDataOfCl)
+                    this.cloudinary_image_url = cloudinary_image_url.data
                     let deltaOps = await this.$refs.myQuillEditor.getContents().ops;                
                     formData.set('header', this.header);
                     formData.set('author', this.author);
-                    formData.set('image', this.image);
                     formData.set('contentType', this.contentType);
                     formData.set('permission', this.permission);
+                    formData.set('cloudinary_img_url', JSON.stringify(this.cloudinary_image_url));
                     formData.set('contentBody', JSON.stringify(deltaOps));
                     let response = await AdminContentServices.postContent(formData); 
                     if(response.data.error){
@@ -120,14 +130,13 @@
             },
             fileChange(e){
                 e.preventDefault();
-                console.log(e.target.files)
                 this.image = e.target.files[0]
             },
             formReset(formData){
                 this.$refs.myQuillEditor.setContents([]);
                 formData.delete('header');
                 formData.delete('author');
-                formData.delete('image');
+                formData.delete('cloudinary_img_url');
                 formData.delete('contentType');
                 formData.delete('permission');
                 formData.delete('contentBody');

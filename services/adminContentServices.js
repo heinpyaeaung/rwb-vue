@@ -8,6 +8,7 @@ class AdminContentServices {
     getAllContents() {
         return http.get('/admin/allcontents')
     }
+
 }
 
 export default new AdminContentServices;

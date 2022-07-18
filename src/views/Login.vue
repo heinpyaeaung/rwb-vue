@@ -43,14 +43,19 @@
         methods: {
             async login() {
                 this.isLoading = true;
-                let response =  await authServices.postLoginInfos(this.loginInfos);
-                if(response.data.error){
+                try{
+                     let response =  await authServices.postLoginInfos(this.loginInfos);
+                    if(response.data.error){
+                        this.isLoading = false;
+                        this.warningText = response.data.error;
+                    }else{
+                        // await this.$cookies.set('secretkey', response.data.secretkey, "30MIN")
+                        await localStorage.setItem('isConfirmed', true)
+                        this.$router.push("/home")
+                    }
+                }catch(err){
                     this.isLoading = false;
-                    this.warningText = response.data.error;
-                }else{
-                    // await this.$cookies.set('secretkey', response.data.secretkey, "30MIN")
-                    await localStorage.setItem('isConfirmed', true)
-                    this.$router.push("/home")
+                    this.warningText = err.message;
                 }
             },
             guestMode(){

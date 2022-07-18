@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <Alertbox :warningText="warningText" @isAlert='isAlert'></Alertbox>
+        <Alertbox :warningText="warningText" @isAlert="isAlert"></Alertbox>
         <loading :active='isLoading' :is-full-page="fullPage" :loader='loader' />
         <div class="register-box">
             <div class="input-container">
@@ -55,7 +55,6 @@
                     }
                 }catch(err){
                     this.isLoading = false;
-                    this.isAlert = true;
                     this.warningText = err.message;
                 }
             },
@@ -67,6 +66,7 @@
                 }
             },
             isAlert(){
+                console.log('register model work box')
                 this.warningText = '';
             }
         },

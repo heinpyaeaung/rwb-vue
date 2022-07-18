@@ -14,7 +14,9 @@
     --main-color: #e2f3f5;
     --second-color: #242038;;
   }
-
+  #app{
+    background-color: #eee;
+  }
   *{
     padding: 0;
     margin: 0;

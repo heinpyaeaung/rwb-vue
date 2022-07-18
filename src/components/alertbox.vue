@@ -1,8 +1,12 @@
 <template>
-     <div v-if="warningText" class="alert-box" ref="alert_box">
-        <h3>{{warningText}}</h3>
-        <p  id="cross-icon"><font-awesome-icon @click="isAlert" icon="xmark" /></p>
-    </div>
+   <transition name="model">
+        <div v-if="warningText" class="dropbox">  
+            <div class="alert-box" ref="alert_box">
+                <h3>{{warningText}}</h3>
+                <p id="cross-icon"><font-awesome-icon icon="xmark" @click="isAlert" /></p>
+            </div>        
+        </div>
+   </transition>
 </template>
 
 <script>
@@ -10,13 +14,39 @@
         props:['warningText'],
         methods: {
             isAlert() {
-                this.$emit('isAlert')
+                this.$emit("isAlert")
             }
         },
     }
 </script>
 
 <style lang="scss" scoped>
+    .model-enter-from{
+        opacity: 0;
+    }
+    .model-enter-to{
+        opacity: 1;
+    }
+    .model-enter-active{
+        transition: all 0.5s ease;
+    }
+    .model-leave-from{
+        opacity: 1;
+    }
+    .model-leave-to{
+        opacity: 0;
+    }
+    .model-leave-active{
+        transition: all 0.5s ease;
+    }
+    .dropbox{
+        position: fixed;
+        top:0;
+        width: 100%;
+        height: 100%;
+        background: rgba(240, 238, 238, 0.5);
+        z-index: 2002;
+    }
     .alert-box{
         position: absolute;
         top: 5%;
