@@ -11,11 +11,11 @@
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Pathway+Gothic+One&display=swap');
   :root{
-    --main-color: #e2f3f5;
+    --main-color: #fdfdfd;
     --second-color: #242038;;
   }
   #app{
-    background-color: #eee;
+    background-color: var(--main-color);
   }
   *{
     padding: 0;

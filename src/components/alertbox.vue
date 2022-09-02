@@ -1,9 +1,9 @@
 <template>
    <transition name="model">
-        <div v-if="warningText" class="dropbox">  
+        <div v-if="warningText" class="dropbox" @click="isAlert">  
             <div class="alert-box" ref="alert_box">
                 <h3>{{warningText}}</h3>
-                <p id="cross-icon"><font-awesome-icon icon="xmark" @click="isAlert" /></p>
+                <!-- <p id="cross-icon"><font-awesome-icon icon="xmark" @click="isAlert" /></p> -->
             </div>        
         </div>
    </transition>
@@ -45,7 +45,7 @@
         width: 100%;
         height: 100%;
         background: rgba(240, 238, 238, 0.5);
-        z-index: 2002;
+        z-index: 2200;
     }
     .alert-box{
         position: absolute;

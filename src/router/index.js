@@ -8,6 +8,7 @@ import Verify from '../views/Verify.vue'
 import Dashboard from '../views/Dashboard.vue'
 import UsersList from '../views/UsersList.vue'
 import Admin from '../views/Admin.vue'
+import Singlepost from '../views/Singlepost.vue'
 
 const routes = [
   {
@@ -28,7 +29,7 @@ const routes = [
     component: Register
   },
   {
-    path: '/login',
+    path: '/',
     name: 'Login',
     component: Login
   },
@@ -64,6 +65,12 @@ const routes = [
   {
     path: '/admin/',
     component: Admin
+  },
+  {
+    path: '/content/:id',
+    name: 'singlepost',
+    props: true,
+    component: Singlepost
   }
 ]
 

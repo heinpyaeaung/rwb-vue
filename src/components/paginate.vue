@@ -117,8 +117,9 @@
             display: inline-block;
             button{
                 padding: 10px 25px;
-                background-color: #000;
-                color: #fff;
+                background-color: #fff;
+                color: #000;
+                cursor: pointer;
             } 
         }
     }

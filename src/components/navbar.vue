@@ -1,17 +1,18 @@
 <template>
     <div class="navbar-container">
-        <h3>𝙍&𝙒𝘽</h3>
+        <h3 @click="$emit('home')">𝙍&𝙒𝘽</h3>
         <div :class="{'items-container': true, 'show-menu': showMenu}" ref="items_container">
             <div class="options-container">
                 <input @click="triggerDropDown" type="text" id="input-box" placeholder="Select Genres" readonly>
                 <div v-show="showDropDown" class="options-box">
-                    <div>Romance</div>
-                    <div>Thriller & Horror</div>
-                    <div>Action & War</div>
-                    <div>Comedy</div>
-                    <div>Fantasy</div>
-                    <div>Historical</div>
-                    <div>Mystery</div>
+                    <div @click="getByTag('romance')">Romance</div>
+                    <div @click="getByTag('thriller')">Thriller & Horror</div>
+                    <div @click="getByTag('action')">Action</div>
+                    <div @click="getByTag('war')">War</div>
+                    <div @click="getByTag('comedy')">Comedy</div>
+                    <div @click="getByTag('fantasy')">Fantasy</div>
+                    <div @click="getByTag('historical')">Historical</div>
+                    <div @click="getByTag('mystery')">Mystery</div>
                 </div>
                 <span @click="triggerDropDown" :class="{active: showDropDown}" id="options-arrow-icon"></span>
             </div>
@@ -19,8 +20,8 @@
             <div class="contact-us">Contact Us</div>
         </div>
         <div class="searchbox-container">
-            <input type="text" placeholder="Search a content">
-            <font-awesome-icon id="magnifying-glass" icon="magnifying-glass"/>
+            <input v-model="contentName" type="text" placeholder="Search a content">
+            <font-awesome-icon @click="searchContentByName" id="magnifying-glass" icon="magnifying-glass"/>
         </div>
         <div class="hamburger-container">   
             <font-awesome-icon @click="menuTrigger" v-if="showMenu" id="cross-icon" icon="xmark"/>   
@@ -35,6 +36,7 @@
             return {
                 showMenu: false,
                 showDropDown: false,
+                contentName:''
             }
         },
         methods: {
@@ -42,8 +44,14 @@
                 this.showDropDown = !this.showDropDown
             },
             menuTrigger() {
-                console.log('trigger work')
                 this.showMenu = !this.showMenu
+            },
+            getByTag(v){
+                this.$emit('getByType', v)
+            },
+            searchContentByName(){
+                this.$emit('searchContentByName', this.contentName)
+                this.contentName = "";
             }
         },
     }
@@ -51,6 +59,9 @@
 
 <style lang="scss" scoped>
     .navbar-container{
+        position: fixed;
+        z-index: 2100;
+        top:0;
         width: 100%;
         padding: 25px 20px;
         background-color: #fff;
@@ -96,6 +107,7 @@
                 font-size: 20px;
                 outline: none;
                 border: none;
+                z-index: 2022;
                 div{
                     margin: 10px 0 10px 15px;
                     cursor: pointer;

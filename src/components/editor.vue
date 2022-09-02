@@ -29,8 +29,13 @@
                     <option value="" selected>Select Type</option>
                     <option value="romance">Romance</option>
                     <option value="horror">Horror</option>
+                    <option value="thriller">Thriller</option>
+                    <option value="action">Action</option>
+                    <option value="war">War</option>
                     <option value="comedy">Comedy</option>
-                    <option value="thriller">thriller</option>
+                    <option value="fantasy">Fantasy</option>
+                    <option value="historical">Historical</option>
+                    <option value="mystery">Mystery</option>
                 </select>   
             </div>
 
@@ -41,7 +46,7 @@
                     <option value="public">Public</option>
                 </select>   
             </div>
-            <QuillEditor id="myQuillEditor" ref="myQuillEditor" :options="options" v-model:content="content"/>
+            <QuillEditor id="myQuillEditor" ref="myQuillEditor" :options="options"/>
             <button id="addContent-btn">Add</button>
         </div>
     </form>
@@ -69,7 +74,6 @@
                 isLoading: false,
                 fullPage: true,
                 loader: 'bars',
-                content:'',
                 warningText:'',
                 options: {
                     modules: {
@@ -105,7 +109,7 @@
                     // formDataOfCl.set('cloud_name', '')
                     let cloudinary_image_url = await instance.post('https://api.cloudinary.com/v1_1/drtoeefis/image/upload', formDataOfCl)
                     this.cloudinary_image_url = cloudinary_image_url.data
-                    let deltaOps = await this.$refs.myQuillEditor.getContents().ops;                
+                    let deltaOps = this.$refs.myQuillEditor.getContents().ops;                
                     formData.set('header', this.header);
                     formData.set('author', this.author);
                     formData.set('contentType', this.contentType);
@@ -120,19 +124,15 @@
                     this.warningText = err.message;    
                 }
                 this.formReset(formData);
+                this.image = '';
                 this.isLoading = false;         
-                // let cfg = {};
-                // let converter = new QuillDeltaToHtmlConverter(deltaOps, cfg);
-
-                // let context = converter.convert(); 
-                // this.contentCollectionsArr.push(context);
-                // this.isLoading = false;
             },
             fileChange(e){
                 e.preventDefault();
                 this.image = e.target.files[0]
             },
             formReset(formData){
+                console.log('formrest function work')
                 this.$refs.myQuillEditor.setContents([]);
                 formData.delete('header');
                 formData.delete('author');
@@ -142,6 +142,7 @@
                 formData.delete('contentBody');
                 this.header = '';
                 this.author = '';
+                this.cloudinary_image_url = '';
                 this.contentType = '';
                 this.permission = '';
                 this.image = '';
@@ -200,7 +201,12 @@ input[type="file"] { display: none; }
     @media only screen and (max-width:576px){
       .container{
             #header,#author{
-                width: 40%;
+                width: 100%;
+            }
+            #contentType,#permission{
+                width: 100%;
+                height: 30px;
+                margin: 10px 0 10px 0;
             }
       }
     } 
