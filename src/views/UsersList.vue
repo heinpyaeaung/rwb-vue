@@ -3,7 +3,7 @@
     <loading :active='isLoading' :is-full-page="fullPage" :loader='loader' />
     <div class="container">
         <div class="search-box-container">
-            <input @keypress.enter="searchingEmail" type="text" v-model="email" placeholder="Search a user...">
+            <input type="text" v-model="email" placeholder="Search a user...">
             <button @click="searchingEmail" class="search-btn">Search</button>
         </div>
         <table>
@@ -11,10 +11,10 @@
                 <th>Email</th>
                 <th>Admin</th>
                 <th>Member</th>
-                <th>Verified</th>
+                <th>Remove</th>
             </tr>
             <tbody>
-                <tr v-for="user in paginatedResult" :key="user._id">
+                <tr v-for="user in paginatedResult" :key="user._id" :class="{admin: user.admin}">
                     <td>
                         {{user.email}}
                     </td>
@@ -29,9 +29,10 @@
                         <font-awesome-icon  @click="changePermission(user._id, 'changemember','member')" v-else id="circle-xmark" :class="{check: user.member}" icon="circle-xmark"/>
                     </td>
                     <td>
+                        <font-awesome-icon id="trash-bin" @click="removeAcc(user)" icon="trash"/>
                         <!-- {{user.isVerified}} -->
-                        <font-awesome-icon  @click="changePermission(user._id, 'changeverify','isVerified')" v-if="user.isVerified" id="circle-check" :class="{check: user.isVerified}" icon="circle-check"/>
-                        <font-awesome-icon  @click="changePermission(user._id, 'changeverify','isVerified')" v-else id="circle-xmark" :class="{check: user.isVerified}" icon="circle-xmark"/>
+                        <!-- <font-awesome-icon  @click="changePermission(user._id, 'changeverify','isVerified')" v-if="user.isVerified" id="circle-check" :class="{check: user.isVerified}" icon="circle-check"/>
+                        <font-awesome-icon  @click="changePermission(user._id, 'changeverify','isVerified')" v-else id="circle-xmark" :class="{check: user.isVerified}" icon="circle-xmark"/> -->
                     </td>
                 </tr>
             </tbody>
@@ -40,6 +41,7 @@
             <Paginate :maxVisibleButton="3" :totalPages="totalPages" :perPage="limit" :currentPage="currentPage" @pagechanged="onPageChange"/>
         </div>
     </div>
+    <div class="backward-btn" @click="goBack"><font-awesome-icon icon="arrow-left"/></div>
 </template>
 
 <script>
@@ -91,9 +93,12 @@
                 }
             },
             async changePermission(userId, action, type){
-                try{
                     this.isLoading = true;
-                    await AdminUserServices.changePermission(userId, action)
+                    let res = await AdminUserServices.changePermission(userId, action)
+                    if(res.data.error){
+                        this.isLoading = false;
+                        return this.warningText = res.data.error;
+                    }
                     this.paginatedResult.forEach(el => {
                        if(el._id === userId){
                            if(type === 'admin'){
@@ -107,40 +112,46 @@
                            }
                        }
                     })
-                    this.isLoading = false;
-                }catch(err){
-                    this.isLoading = false;
-                    this.warningText = err.message;
-                }
+                    this.isLoading = false;  
             },
             onPageChange(page) {
               this.limitaion(page, this.limit)
             },
             customLimitation() {
-                window.outerWidth > 576 ? this.limit = 7 : this.limit = 2;
+                window.outerWidth > 576 ? this.limit = 35 : this.limit = 20;
                 this.limitaion(1, this.limit);
             },
             isAlert(){
                 this.warningText = '';
             },
             async searchingEmail(){
-                try{
-                    this.isLoading = true;
-                    let response = await AdminUserServices.searchAnEmail(this.email);
-                    this.triggerPaginatedContainer = false;
-                    if(response.data.error){
-                        this.isLoading = false;
-                        this.paginatedResult.length = 0;
-                        // this.paginatedResult = []
-                        this.warningText = response.data.error;
-                    }else{
-                        this.isLoading = false;
-                        let total = response.data.totalLengthOfUsers;
-                        this.totalPages = Math.ceil(total / this.limit);
-                        this.warningText = '';
-                        this.paginatedResult = response.data.filteredUsers;
-                    }
-                }catch(err){ this.warningText = err.message }
+                this.isLoading = true;
+                let response = await AdminUserServices.searchAnEmail(this.email);
+                this.triggerPaginatedContainer = false;
+                if(response.data.error){
+                    this.isLoading = false;
+                    this.paginatedResult.length = 0;
+                    // this.paginatedResult = []
+                    this.warningText = response.data.error;
+                }
+                this.isLoading = false;
+                let total = response.data.totalLengthOfUsers;
+                this.totalPages = Math.ceil(total / this.limit);
+                this.warningText = '';
+                this.paginatedResult = response.data.filteredUsers;      
+            },
+            goBack(){
+                this.$router.push('/admin/controlpanel')
+            },
+            async removeAcc(userInfos){
+                this.isLoading = true;
+                let res = await AdminUserServices.delUser(userInfos);
+                if(res.data.error){
+                    this.isLoading = false;
+                    this.warningText = res.data.error;
+                }
+                this.isLoading = false;
+                this.customLimitation();
             }
         },
         mounted () {
@@ -151,6 +162,27 @@
 </script>
 
 <style lang="scss" scoped>
+    .admin{
+        background-color: #aef6ae !important;
+    }
+    .backward-btn{
+        cursor: pointer;
+        position: fixed;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        bottom: 2%;
+        right: 2%;
+        width: 4rem;
+        height: 4rem;
+        border-radius: 50%;
+        background-color: #fdfdfd;
+        box-shadow: rgba(99, 99, 99, 0.404) 0px 2px 8px 0px;
+        transition: all 0.1s ease;
+        &:hover{
+            transform: scale(1.05);
+        }
+    }
     .pagination-container{
         width: 100%;
         position: fixed;
@@ -204,6 +236,12 @@
     }
     .check{
         color: green !important;
+    }
+    #trash-bin{
+        cursor: pointer;
+        &:hover{
+            color: red;
+        }
     }
     // @media screen and (max-width:992px){
     //     .pagination-container{

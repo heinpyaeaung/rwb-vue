@@ -1,22 +1,26 @@
 <template>
+    <!-- <Modelbox modeltext="hello model box"></Modelbox> -->
     <div class="navbar-container">
         <h3 @click="$emit('home')">𝙍&𝙒𝘽</h3>
-        <div :class="{'items-container': true, 'show-menu': showMenu}" ref="items_container">
+        <div :class="{'items-container': true, 'show-menu': showMenu}" ref="items_container">      
             <div class="options-container">
-                <input @click="triggerDropDown" type="text" id="input-box" placeholder="Select Genres" readonly>
+                <input @click="triggerDropDown" type="text" id="input-box" placeholder="Categories" readonly>
                 <div v-show="showDropDown" class="options-box">
-                    <div @click="getByTag('romance')">Romance</div>
-                    <div @click="getByTag('thriller')">Thriller & Horror</div>
-                    <div @click="getByTag('action')">Action</div>
-                    <div @click="getByTag('war')">War</div>
-                    <div @click="getByTag('comedy')">Comedy</div>
-                    <div @click="getByTag('fantasy')">Fantasy</div>
-                    <div @click="getByTag('historical')">Historical</div>
-                    <div @click="getByTag('mystery')">Mystery</div>
+                    <div @click="getByTag('health')">Health</div>
+                    <div @click="getByTag('health')">History</div>
+                    <div @click="getByTag('programming')">Programming</div>
+                    <div @click="getByTag('technology')">Technology</div>
+                    <div @click="getByTag('sport')">Sport</div>
+                    <div @click="getByTag('science')">Science</div>
+                    <div @click="getByTag('business')">Business</div>
+                    <div @click="getByTag('tourism')">Tourism</div>
+                    <div @click="getByTag('crypto')">Crypto</div>
+                    <div @click="getByTag('others')">Others</div>
                 </div>
                 <span @click="triggerDropDown" :class="{active: showDropDown}" id="options-arrow-icon"></span>
             </div>
-            <div class="profile">Profile</div>
+            <div class="profile"><router-link class="editorboard-btn" to="/myprofile">Profile</router-link></div>  
+            <div class="editor-board"><router-link class="editorboard-btn" to="/member/editorboard">Editor</router-link></div>
             <div class="contact-us">Contact Us</div>
         </div>
         <div class="searchbox-container">
@@ -31,7 +35,9 @@
 </template>
 
 <script>
-    export default {
+import Modelbox from './modelbox'
+export default {
+  components: { Modelbox },
         data() {
             return {
                 showMenu: false,
@@ -44,7 +50,8 @@
                 this.showDropDown = !this.showDropDown
             },
             menuTrigger() {
-                this.showMenu = !this.showMenu
+                this.showDropDown = false
+                this.showMenu = !this.showMenu;
             },
             getByTag(v){
                 this.$emit('getByType', v)
@@ -60,7 +67,7 @@
 <style lang="scss" scoped>
     .navbar-container{
         position: fixed;
-        z-index: 2100;
+        z-index: 2900;
         top:0;
         width: 100%;
         padding: 25px 20px;
@@ -81,16 +88,22 @@
                 margin-left: 5%;
                 cursor: pointer;
             }
-            .contact-us{
+            .contact-us,.profile,.editor-board{
+                .editorboard-btn{
+                    text-decoration: none;
+                    color: #000;
+                }
                 margin-left: 5%;
                 cursor: pointer;
             }
             #input-box{
+                width: 6rem;
                 font-size: 15px;
                 outline: none;
                 border: none;
                 font-weight: 600;
                 cursor: pointer;
+                letter-spacing: 1px;
                 &::placeholder{
                     color: #000;
                     letter-spacing: 1px;
@@ -133,12 +146,16 @@
             .cross-icon-container{
                 display: none;
             }
+            .delAcc-btn{
+                bottom: 1rem;
+            }
         }
         .searchbox-container{
             width: 60%;
             text-align: end;
             input{
-                font-size: 1rem;
+                font-size: 20px;
+                letter-spacing: 0.5px;
                 width: 40%;
                 border-top: none;
                 border-left: none;
@@ -229,7 +246,7 @@
                     margin-left: 0;
                     font-weight: bold;
                 }
-                .contact-us{
+                .contact-us,.profile,.editor-board{
                     margin-left: 0;
                     font-weight: bold;
                 }
@@ -238,6 +255,7 @@
                 top: 0;
                 left: 0;
                 width: 80%;
+                overflow-y: scroll;
                 flex-direction: column;
                 background-color: #fff;
                 box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
@@ -270,6 +288,7 @@
                     cursor: pointer;
                 }           
             }
+
        }
     }
     //small 

@@ -1,7 +1,17 @@
 <template>
-    <div class="container">
-        <h1>{{ warningText }}</h1>
-        <router-link to="/login"><a href="#">>> Go To Login Page</a></router-link>
+    <div class="container">      
+        <section>
+            <div class="thumbs-container">
+                <font-awesome-icon v-if="successText" id="thumbs" icon="thumbs-up"/>
+                <font-awesome-icon v-else id="thumbs" icon="face-frown"/>
+            </div>
+            <h2 v-if="successText">{{successText}}</h2>
+            <h2 v-if="warningText">{{warningText}}</h2>
+            <p v-if="successText">
+                Thank you for your support. we have successfully verified your rwb account.
+                Please go back to your login page and you can now proceed to login.
+            </p>
+        </section>
     </div>
 </template>
 
@@ -11,15 +21,18 @@
         props: ['token'],
         data() {
             return {
-                warningText: ''
+                warningText: '',
+                successText:''
             }
         },
-        async mounted () {
+        async mounted() {
            let response = await AuthServices.userVerify(this.token)
            if(response.data.error){
+               this.successText = '';
                this.warningText = response.data.error;
            }else{
-               this.warningText = response.data.message;
+               this.warningText = '';
+               this.successText = response.data.message;
            }
         },
     }
@@ -27,15 +40,50 @@
 
 <style lang="scss" scoped>
     .container{
-        h1{
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        height: 100vh;
+        min-height: 100vh;
         display: flex;
-        flex-direction: column;
-        align-items: center;
         justify-content: center;
+        align-items: center;
         background-color: var(--main-color);
+        section{
+            min-height: 40vh;
+            width: 40%;
+            box-shadow: rgba(99, 99, 99, 0.4) 0px 2px 8px 0px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            p{
+                width: 70%;
+                text-align: center;
+            }
+            .thumbs-container{
+                box-shadow: rgba(245, 242, 242, 0.3) 0px 2px 8px 0px;
+                padding: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: rgb(87, 194, 66);
+                border-radius: 50%;
+                margin-top: -5rem;
+                #thumbs{
+                    font-size: 5rem;
+                    color: rgb(226, 226, 225);
+                }
+            }
+        }
+    }
+    @media screen and (max-width:768px){
+        .container{
+            section{
+                min-height: 30vh;
+                width: 80%;
+                .thumbs-container{
+                    #thumbs{
+                        font-size: 3rem;
+                    }
+                }
+            }
+        }
     }
 </style>

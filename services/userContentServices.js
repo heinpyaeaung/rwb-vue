@@ -9,7 +9,12 @@ class UserContentServices {
             }
         })
     }
-    
+    getAllUsers(){
+        return http.get('/totalusers')
+    }
+    getTodayContents(){
+        return http.get('/user/todayupdate')
+    }
     getSingleDetailsPost(id){
         return http.get(`/user/content/${id}`)
     }
@@ -32,6 +37,10 @@ class UserContentServices {
                 limit
             }
         })
+    }
+
+    reactedPost(action,id){
+        return http.post(`/user/ratecontent/${action}/${id}`)
     }
 }
 

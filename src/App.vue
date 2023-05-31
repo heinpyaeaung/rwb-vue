@@ -3,9 +3,9 @@
 </template>
 <script>
 
-  export default {
+export default {
     
-  }
+}
 </script>
 
 <style lang="scss">
@@ -16,6 +16,7 @@
   }
   #app{
     background-color: var(--main-color);
+    // scroll-behavior: smooth;
   }
   *{
     padding: 0;

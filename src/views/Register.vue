@@ -10,7 +10,7 @@
             </div>
             <div class="btn-container" ref="btnBox">
                 <button @click="register" :disabled="isDisabled" id="register-btn" type="submit">Register</button>
-                <router-link to="/login"><a href="#">Already have an account? Log in here</a></router-link>
+                <router-link to="/"><a href="#">Already have an account? Log in here</a></router-link>
             </div>
         </div>     
     </div>
@@ -105,6 +105,7 @@
                     padding: 3px 6px;
                     height: 35px;                  
                     outline: none;
+                    letter-spacing: 0.5px;
                 }
             }
             .btn-container{

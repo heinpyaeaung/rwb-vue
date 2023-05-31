@@ -8,10 +8,10 @@
                 <input v-model="header" type="text" id="header">
             </div>
 
-            <div>
+            <!-- <div>
                     <h5>Author :</h5>
                     <input v-model="author" type="text" id="author">
-            </div>
+            </div> -->
 
             <div>
                 <label for="content_image" id="content-image">
@@ -27,15 +27,16 @@
             <div>
                 <select v-model="contentType" name="contentType" id="contentType" ref="contentType">
                     <option value="" selected>Select Type</option>
-                    <option value="romance">Romance</option>
-                    <option value="horror">Horror</option>
-                    <option value="thriller">Thriller</option>
-                    <option value="action">Action</option>
-                    <option value="war">War</option>
-                    <option value="comedy">Comedy</option>
-                    <option value="fantasy">Fantasy</option>
-                    <option value="historical">Historical</option>
-                    <option value="mystery">Mystery</option>
+                    <option value="health">Health</option>
+                    <option value="history">History</option>
+                    <option value="programming">Programming</option>
+                    <option value="technology">Technology</option>
+                    <option value="sport">Sport</option>
+                    <option value="science">Science</option>
+                    <option value="business">Business</option>
+                    <option value="tourism">Tourism</option>
+                    <option value="crypto">Crypto</option>
+                    <option value="others">Other...</option>
                 </select>   
             </div>
 
@@ -89,7 +90,7 @@
                     contentType: 'delta',
                 },                      
                 header: '',
-                author: '',
+                // author: '',
                 image: '',
                 cloudinary_image_url:'',
                 contentType: '',
@@ -98,7 +99,6 @@
         },
         methods: {
             async sendInfos() {
-                const instance = axios.create()
                 const formData = new FormData();
                 const formDataOfCl = new FormData();
                 this.isLoading = true;
@@ -107,17 +107,22 @@
                     formDataOfCl.set('upload_preset', "rwb_content_image");
                     formDataOfCl.set('file', this.image)
                     // formDataOfCl.set('cloud_name', '')
-                    let cloudinary_image_url = await instance.post('https://api.cloudinary.com/v1_1/drtoeefis/image/upload', formDataOfCl)
-                    this.cloudinary_image_url = cloudinary_image_url.data
+                    if(this.image){
+                        let cloudinary_image_infos = await AdminContentServices.postContentImgToCl(formDataOfCl)
+                        this.cloudinary_image_url = cloudinary_image_infos.data
+                    }
                     let deltaOps = this.$refs.myQuillEditor.getContents().ops;                
                     formData.set('header', this.header);
-                    formData.set('author', this.author);
+                    // formData.set('author', this.author);
                     formData.set('contentType', this.contentType);
                     formData.set('permission', this.permission);
                     formData.set('cloudinary_img_url', JSON.stringify(this.cloudinary_image_url));
                     formData.set('contentBody', JSON.stringify(deltaOps));
                     let response = await AdminContentServices.postContent(formData); 
                     if(response.data.error){
+                        // formDataOfCl.set('file', this.cloudinary_image_url.asset_id)
+                        // let res = await AdminContentServices.deleteContentImgFromCl(this.cloudinary_image_url.secure_url)
+                        // console.log(res)
                         this.warningText = response.data.error;
                     }   
                 }catch(err){
@@ -132,16 +137,15 @@
                 this.image = e.target.files[0]
             },
             formReset(formData){
-                console.log('formrest function work')
                 this.$refs.myQuillEditor.setContents([]);
                 formData.delete('header');
-                formData.delete('author');
+                // formData.delete('author');
                 formData.delete('cloudinary_img_url');
                 formData.delete('contentType');
                 formData.delete('permission');
                 formData.delete('contentBody');
                 this.header = '';
-                this.author = '';
+                // this.author = '';
                 this.cloudinary_image_url = '';
                 this.contentType = '';
                 this.permission = '';
@@ -169,14 +173,20 @@ input[type="file"] { display: none; }
         }
         #addContent-btn{
             margin-top: 10px;
-            width: 50px;
-            height: 25px;
+            width: 4rem;
+            font-size: 1rem;
+            height: 30px;
             cursor: pointer;
-            color: #fff;
+            color: rgb(0, 0, 0);
             letter-spacing: 2px;
+            border: 1px solid #000;
             font-size: 15px;
-            background-color: var(--second-color);
-            border: none;
+            background-color: #fdfdfd;
+            border: 1px solid #000;
+            &:hover{
+                background-color: #000;
+                color: #fdfdfd
+            }
         }
         #content-image{
             background-color: rgba(228, 230, 228, 0.856);

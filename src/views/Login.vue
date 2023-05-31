@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import authServices from '../../services/authServices'
+    import authServices from '../../services/authServices';
     import Loading from 'vue-loading-overlay';
     import 'vue-loading-overlay/dist/vue-loading.css';
     import Alertbox from '../components/alertbox.vue';
@@ -44,13 +44,13 @@
             async login() {
                 this.isLoading = true;
                 try{
-                     let response =  await authServices.postLoginInfos(this.loginInfos);
+                    let response =  await authServices.postLoginInfos(this.loginInfos);
                     if(response.data.error){
                         this.isLoading = false;
                         this.warningText = response.data.error;
-                    }else{
-                        // await this.$cookies.set('secretkey', response.data.secretkey, "30MIN")
-                        await localStorage.setItem('isConfirmed', true)
+                    }
+                    if(response.data.success){
+                        await localStorage.setItem('isConfirmed', response.data.success)
                         this.$router.push("/home")
                     }
                 }catch(err){
@@ -110,6 +110,7 @@
                     padding: 3px 6px;
                     height: 35px;                  
                     outline: none;
+                    letter-spacing: 0.5px;
                 }
             }
             .btn-container{

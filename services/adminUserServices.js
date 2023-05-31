@@ -19,6 +19,14 @@ class AdminUserServices {
             }
         })
     }
+
+    delUser(user_infos){
+        return http.delete('/admin/remove/member_acc',{
+            params:{
+                user_infos
+            }
+        })
+    }
 }
 
 export default new AdminUserServices;

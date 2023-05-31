@@ -17,6 +17,16 @@ class AuthServices {
         return http.post('/login', data)
     }
 
+    //logout section
+    logout(){
+        return http.get('/logout')
+    }
+
+    //change password 
+    changePwd(data){
+        return http.patch('/user/profile/changepwd', data)
+    }
+
     //forgot section
     postForgotInfos(data){
         return http.post('/forgot', data)
@@ -25,6 +35,10 @@ class AuthServices {
         return http.post('/reset', data)
     }
 
+    //del account
+    delUserAcc(){
+        return http.get('/delete/my_account')
+    }
 
     //verify user
     userVerify(token){

@@ -45,7 +45,7 @@
         width: 100%;
         height: 100%;
         background: rgba(240, 238, 238, 0.5);
-        z-index: 2200;
+        z-index: 3000;
     }
     .alert-box{
         position: absolute;

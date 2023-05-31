@@ -7,8 +7,12 @@ import Reset from '../views/Resetpwd.vue'
 import Verify from '../views/Verify.vue'
 import Dashboard from '../views/Dashboard.vue'
 import UsersList from '../views/UsersList.vue'
-import Admin from '../views/Admin.vue'
+import ControlPanel from '../views/ControlPanel.vue'
 import Singlepost from '../views/Singlepost.vue'
+import NotFound from '../views/NotFound.vue'
+import EditorBoard from '../views/EditorBoard.vue'
+import Profile from '../views/Profile.vue'
+import Setting from '../views/Setting.vue'
 
 const routes = [
   {
@@ -39,6 +43,11 @@ const routes = [
     component: Forgot
   },
   {
+    path: '/myprofile',
+    name: 'Profile',
+    component: Profile
+  },
+  {
     path: '/reset',
     name: 'Reset',
     component: Reset,
@@ -50,7 +59,7 @@ const routes = [
     }
   },
   {
-    path: '/verify/:token',
+    path: '/user/verify/:token',
     component: Verify,
     props: true
   },
@@ -59,18 +68,31 @@ const routes = [
     component: Dashboard
   },
   {
+    path: '/member/editorboard',
+    component: EditorBoard
+  },
+  {
     path: '/admin/userslist',
     component: UsersList
   },
   {
-    path: '/admin/',
-    component: Admin
+    path: '/admin/controlpanel',
+    component: ControlPanel
   },
   {
     path: '/content/:id',
     name: 'singlepost',
     props: true,
     component: Singlepost
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'notfound',
+    component: NotFound
+  },
+  {
+    path: '/myprofile/setting',
+    component: Setting
   }
 ]
 

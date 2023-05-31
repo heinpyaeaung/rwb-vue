@@ -1,22 +1,33 @@
 <template>
+    <loading :active='isLoading' :is-full-page="fullPage" :loader='loader' />
     <div>
-        <Editor/>
+        <Alertbox :warning-text="warningText" @isAlert="warningText=''"></Alertbox>
+        <Editor></Editor>
         <div class="backward-btn" @click="goBack"><font-awesome-icon icon="arrow-left"/></div>
     </div>
 </template>
 
 <script>
-    import Editor from '../components/editor.vue'
+    import Loading from 'vue-loading-overlay';      
+    import 'vue-loading-overlay/dist/vue-loading.css';
+    import Alertbox from '../components/alertbox'
+    import Editor from '../components/editor'
     export default {
-        name:"Dashboard",
-        components: {
-            Editor
+        components: {Alertbox, Editor, Loading },
+        data() {
+            return {
+                warningText: '',
+                isLoading: false,
+                fullPage: true,
+                loader: 'bars',
+            }
         },
         methods: {
             goBack() {
-                this.$router.push('/admin/controlpanel')
+                this.$router.go(-1)
             }
         },
+        
     }
 </script>
 
